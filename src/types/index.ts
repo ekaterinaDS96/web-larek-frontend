@@ -14,6 +14,13 @@ export interface IApi {
     post(uri: string, data: object, method: string): Promise<object>;
   }
 
+  //WebLarekAPI
+  export interface IWebLarekAPI {
+    getProductList(): Promise<ICard[]>;
+    getProductItem(id: string): Promise<ICard>;
+    sendOrder(order: IOrder): Promise<IOrderResult>;
+}
+
 //Component
 export interface IComponent<NodeType extends HTMLElement, DataType extends object> {
     render(data: DataType): NodeType;
@@ -93,12 +100,18 @@ export interface IBasketData {
 }
 
 //OrderData
-export interface IOrderData {
+export interface IOrder {
     items: ICard[];
     total: number;
     payment: string;
     email: string;
     phone: string;
     address: string;
+}
+
+//Ответ сервера о результате заказа
+export interface IOrderResult {
+    id: string;
+    total: number | null;
 }
 
