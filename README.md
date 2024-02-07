@@ -40,8 +40,9 @@ npm run build
 ```
 yarn build
 ```
+<br> 
 
-*** Архитектура проекта и реализация классов сделаны на основе проекта "Оно тебе надо" (https://github.com/yandex-praktikum/ono-tebe-nado-oop) *** <br><br> 
+*** Архитектура проекта и реализация классов сделаны на основе проекта "Оно тебе надо" ***  (https://github.com/yandex-praktikum/ono-tebe-nado-oop)<br>
 ## Базовые классы  
 ### Класс `EventEmitter`
 
