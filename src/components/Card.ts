@@ -1,113 +1,112 @@
-import { Component } from "./base/Component"; 
-import { ICard, IActions } from "../types";
-import { ensureElement } from "../utils/utils";
-import { productCategory } from "../utils/constants";
-
-
+import {Component} from "./base/Component";
+import {ICard, IActions} from "../types";
+import {ensureElement} from "../utils/utils";
 export class Card extends Component<ICard> {
-    protected _index?: HTMLElement;
-    protected _title: HTMLElement;
-    protected _description?: HTMLElement;
-    protected _category?: HTMLElement;
-    protected _price: HTMLElement;
-    protected _image?: HTMLImageElement;
-    protected _button?: HTMLButtonElement;
+  protected _title: HTMLElement;
+  protected _price: HTMLElement;
+  protected _image?: HTMLImageElement;
+  protected _description?: HTMLElement;
+  protected _button?: HTMLButtonElement;
+  protected _category?: HTMLElement;
+  protected _index?: HTMLElement;
+  protected _buttonTitle: string;
 
-    constructor(container: HTMLElement, actions?: IActions) {
-        super(container);
+  constructor(container: HTMLElement, actions?: IActions) {
+    super(container);
 
-        this._index = container.querySelector('.basket__item-index');
-        this._title = ensureElement<HTMLElement>('.card__title', container);
-        this._description = container.querySelector('.card__text');
-        this._category = container.querySelector('.card__category');
-        this._price = ensureElement<HTMLElement>('.card__price', container);
-        this._image = container.querySelector('.card__image');
-        this._button = container.querySelector('.card__button');
+    this._title = ensureElement<HTMLElement>('.card__title', container);
+    this._price = ensureElement<HTMLElement>('.card__price', container);
+    this._image = container.querySelector('.card__image');
+    this._button = container.querySelector('.card__button');
+    this._description = container.querySelector('.card__text');
+    this._category = container.querySelector('.card__category');
+    this._index = container.querySelector('.basket__item-index');
 
-        // Подключение обработчиков событий, если определено действие
-        if (actions?.onClick) {
-            this._button?.addEventListener('click', actions.onClick);
-            if (!this._button) {
-                container.addEventListener('click', actions.onClick);
-            }
-        }
+    if (actions?.onClick) {
+      if (this._button) {
+          this._button.addEventListener('click', actions.onClick);
+      } else {
+          container.addEventListener('click', actions.onClick);
+      }
     }
+  }
 
-    // Метод для отключения кнопки цены
-    disablePriceButton(value: number | null) {
-        if (!value && this._button) {
-            this._button.disabled = true;
-        }
-    }
+  set id(value: string) {
+    this.container.dataset.id = value;
+  }
 
-    // Сеттер и геттер для ID карточки
-    set id(value: string) {
-        this.container.dataset.id = value;
-    }
+  get id(): string {
+    return this.container.dataset.id || '';
+  }
 
-    get id(): string {
-        return this.container.dataset.id || '';
-    }
+  set title(value: string) {
+    this.setText(this._title, value);
+  }
 
-    // Сеттер и геттер для названия
-    set title(value: string) {
-        this.setText(this._title, value);
-    }
+  get title(): string {
+    return this._title.textContent || '';
+  }
 
-    get title(): string {
-        return this._title.textContent || '';
-    }
+  set price(value: number | null) {
+    this.setText(this._price, (value) ? `${value.toString()} синапсов` : '');
+    this.disableButton(value);
+  }
 
-    // Сеттер и геттер для цены
-    set price(value: number | null) {
-        this.setText(this._price, value ? `${value} синапсов` : '');
-        this.disablePriceButton(value);
-    }
+  get price(): number {
+    return Number(this._price.textContent || '');
+  }
 
-    get price(): number {
-        return Number(this._price.textContent?.replace(' синапсов', '')) || 0;
-    }
+  set category(value: string) {
+    this.setText(this._category, value);
+    this._category.classList.add(this.classByCategory(value))
+  }
 
-    // Сеттер и геттер для категории
-    set category(value: string) {
-      this.setText(this._category, value);
-      this._category.classList.add(productCategory[value])
-    }
+  get category(): string {
+    return this._category.textContent || '';
+  }
 
-    get category(): string {
-        return this._category?.textContent || '';
-    }
+  set index(value: string) {
+    this._index.textContent = value;
+  }
 
-    // Сеттер и геттер для индекса
-    set index(value: string) {
-        if (this._index) {
-            this._index.textContent = value;
-        }
-    }
+  get index(): string {
+    return this._index.textContent || '';
+  }
 
-    get index(): string {
-        return this._index?.textContent || '';
-    }
+  set image(value: string) {
+    this.setImage(this._image, value, this.title)
+  }
 
-    // Сеттер для изображения
-    set image(value: string) {
-        if (this._image) {
-            this._image.src = value;
-            this._image.alt = this.title;
-        }
-    }
+  set description(value: string) {
+    this.setText(this._description, value);
+  }
 
-    // Сеттер для описания
-    set description(value: string) {
-        if (this._description) {
-            this.setText(this._description, value);
-        }
+  set buttonTitle(value: string) {
+    if (this._button) {
+      this._button.textContent = value;
     }
+  }
 
-    // Сеттер для текста кнопки
-    set buttonTitle(value: string) {
-        if (this._button) {
-            this._button.textContent = value;
-        }
+  classByCategory(value: string): string {
+    switch (value) {
+        case 'софт-скил':
+            return 'card__category_soft';
+        case 'хард-скил':
+            return 'card__category_hard';
+        case 'кнопка':
+            return 'card__category_button';
+        case 'дополнительное':
+            return 'card__category_additional';
+        default :
+            return 'card__category_other'
     }
+}
+
+disableButton(value: number | null) {
+    if(!value){
+      if(this._button){
+        this._button.disabled = true;
+      }
+    }
+  }
 }

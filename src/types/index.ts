@@ -1,8 +1,32 @@
 export type ApiListResponse<Type> = {
-    total: number, 
-    items: Type[] 
+    total: number,
+    items: Type[]
 };
 
+export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+
+
+export type EventName = string | RegExp;
+export type Subscriber = Function;
+export type EmitterEvent = {
+    eventName: string,
+    data: unknown
+};
+
+export interface IEvents {
+    on<T extends object>(event: EventName, callback: (data: T) => void): void;
+    emit<T extends object>(event: string, data?: T): void;
+    trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
+}
+
+export interface IFormState {
+    valid: boolean;
+    errors: string[];
+}
+
+export interface IModalData {
+    content: HTMLElement;
+}
 
 export interface IWebLarekAPI {
     getProductList: () => Promise<IProduct[]>; 
@@ -14,8 +38,6 @@ export interface IOrderResult {
     id: string; 
     total: number | null; 
 }
-
-export type ApiResponse<T> = Promise<T>; 
 
 export interface IProduct {
     id: string; 
@@ -32,11 +54,11 @@ export interface IAppState {
     order: IOrder | null; 
     preview: string | null; 
     orderForm: IOrderForm | null; 
-    contactForm: IContactForm | null; 
+    contactForm: IContact | null; 
     formErrors: FormErrors;
 }
 
-export interface IOrder extends IOrderForm, IContactForm {
+export interface IOrder extends IOrderForm, IContact {
     total: number | null; 
     items: string[]; 
 }
@@ -46,10 +68,15 @@ export interface IOrderForm {
     address: string; 
 }
 
-export interface IContactForm {
+export interface IContact {
     email: string; 
     phone: string;
 }
+
+export interface IDelivery {
+    payment: string;
+    address: string;
+  }
 
 export interface FormErrors {
     address?: string; 
@@ -62,9 +89,6 @@ export interface IPage {
     catalog: HTMLElement[]; 
 }
 
-export interface IModalData {
-    content: HTMLElement; 
-}
 
 export interface IFormState {
     valid: boolean; 
