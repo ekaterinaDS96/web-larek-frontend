@@ -5,7 +5,7 @@ import {API_URL, CDN_URL, PaymentMethods} from "./utils/constants";
 import {EventEmitter} from "./components/base/events";
 import {AppState, CatalogChangeEvent, Product} from "./components/AppData";
 import {Page} from "./components/Page";
-import {cloneTemplate, createElement, ensureElement} from "./utils/utils";
+import {cloneTemplate, ensureElement} from "./utils/utils";
 import {Modal} from "./components/common/Modal";
 import {IContact, IDelivery, IOrder} from "./types";
 import { Card } from './components/Card';
